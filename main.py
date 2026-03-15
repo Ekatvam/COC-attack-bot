@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 COC Attack Bot - Main Entry Point
-Automated Clash of Clans attack bot for Windows
+Cross-platform automated Clash of Clans attack bot
 """
 
 import sys

@@ -9,8 +9,7 @@ import time
 import os
 from typing import Optional, Tuple, List
 from datetime import datetime
-import win32gui
-import win32con
+import pygetwindow as gw
 
 class ScreenCapture:
     """Handles screen capture and game window detection"""
@@ -29,25 +28,30 @@ class ScreenCapture:
     
     def find_game_window(self) -> Optional[Tuple[int, int, int, int]]:
         """Find the COC game window and return its bounds (x, y, width, height)"""
-        def enum_windows_callback(hwnd, windows):
-            if win32gui.IsWindowVisible(hwnd):
-                window_title = win32gui.GetWindowText(hwnd)
-                if "clash of clans" in window_title.lower() or "bluestacks" in window_title.lower() or "nox" in window_title.lower():
-                    rect = win32gui.GetWindowRect(hwnd)
-                    windows.append((hwnd, window_title, rect))
-        
-        windows = []
-        win32gui.EnumWindows(enum_windows_callback, windows)
-        
-        if windows:
-            # Take the first match
-            hwnd, title, rect = windows[0]
-            x, y, right, bottom = rect
-            width = right - x
-            height = bottom - y
-            self.game_window_bounds = (x, y, width, height)
-            print(f"Found game window: {title} at ({x}, {y}, {width}, {height})")
-            return self.game_window_bounds
+        try:
+            windows = gw.getWindowsWithTitle('Clash of Clans') + \
+                     gw.getWindowsWithTitle('BlueStacks') + \
+                     gw.getWindowsWithTitle('NoxPlayer')
+            
+            for window in windows:
+                if window.isActive or window.visible:
+                    x, y, width, height = window.left, window.top, window.width, window.height
+                    self.game_window_bounds = (x, y, width, height)
+                    print(f"Found game window: {window.title} at ({x}, {y}, {width}, {height})")
+                    return self.game_window_bounds
+            
+            # Also check for partial title matches
+            all_windows = gw.getAllTitles()
+            for title in all_windows:
+                if any(keyword in title.lower() for keyword in ['clash of clans', 'bluestacks', 'nox']):
+                    window = gw.getWindowsWithTitle(title)[0]
+                    x, y, width, height = window.left, window.top, window.width, window.height
+                    self.game_window_bounds = (x, y, width, height)
+                    print(f"Found game window: {title} at ({x}, {y}, {width}, {height})")
+                    return self.game_window_bounds
+                    
+        except Exception as e:
+            print(f"Error finding game window: {e}")
         
         print("Could not find COC game window. Make sure the game is running.")
         return None

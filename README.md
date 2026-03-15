@@ -1,6 +1,6 @@
 # COC Attack Bot
 
-A Windows automation bot for Clash of Clans that can record attack sessions and replay them automatically with AI-powered base analysis.
+A cross-platform automation bot for Clash of Clans that can record attack sessions and replay them automatically with AI-powered base analysis.
 
 ## ⚠️ Disclaimer
 
@@ -20,7 +20,7 @@ This bot is for educational purposes only. Use at your own risk. The author is n
 
 ## Requirements
 
-- Windows 10 or later
+- Windows 10+, macOS 10.12+, or Linux (Ubuntu 18.04+ recommended)
 - Python 3.8 or later
 - **Clash of Clans running in FULL SCREEN mode** (required for all operations)
 - Compatible with emulators (BlueStacks, NoxPlayer, etc.)
@@ -42,7 +42,7 @@ This bot is for educational purposes only. Use at your own risk. The author is n
 3. **Configure the bot:**
    ```bash
    # Copy the example configuration file
-   copy src\utils\example.config.py src\utils\config.py
+   cp src/utils/example.config.py src/utils/config.py
    ```
 
 4. **Get a Google Gemini API key:**
@@ -51,7 +51,7 @@ This bot is for educational purposes only. Use at your own risk. The author is n
    - Copy the API key for the next step
 
 5. **Edit the configuration:**
-   - Open `src\utils\config.py` in a text editor
+   - Open `src/utils/config.py` in a text editor
    - Replace the placeholder API key on line 82 with your actual Gemini API key:
      ```python
      "google_gemini_api_key": "YOUR_ACTUAL_API_KEY_HERE",
@@ -59,9 +59,8 @@ This bot is for educational purposes only. Use at your own risk. The author is n
    - Set `"enabled": True` on line 83 to enable AI analysis
 
 6. **Run the bot:**
-   ```bash
-   python main.py
-   ```
+   - On Windows: `run_bot.bat` or `python main.py`
+   - On macOS/Linux: `./run_bot.sh` or `python3 main.py`
 
 ## Quick Start Guide
 

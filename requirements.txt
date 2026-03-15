@@ -2,8 +2,8 @@
 
 # Core automation libraries
 pyautogui>=0.9.54
-keyboard>=0.13.0
-pywin32>=306
+pynput>=1.7.0
+pygetwindow>=0.0.9
 
 # Image processing
 opencv-python>=4.8.0

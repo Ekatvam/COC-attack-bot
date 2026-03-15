@@ -134,18 +134,23 @@ class AttackRecorder:
                 # Auto-click detection (enabled by default)
                 if self.auto_detect_clicks:
                     try:
-                        # Method 1: Try win32 API for reliable mouse detection
-                        import win32api
-                        left_button_state = win32api.GetKeyState(0x01)  # VK_LBUTTON
-                        right_button_state = win32api.GetKeyState(0x02)  # VK_RBUTTON
-                        
-                        if left_button_state < 0 or right_button_state < 0:  # Button is pressed
-                            x, y = pyautogui.position()
-                            # Check if this is a new click (avoid duplicates)
-                            if (current_time - self._last_click_time) > 0.15:  # 150ms debounce
-                                self._add_action('click', x, y, current_time)
-                                print(f"🖱️ Auto-recorded click at ({x}, {y})")
-                                self._last_click_time = current_time
+                        import platform
+                        if platform.system() == 'Windows':
+                            # Method 1: Try win32 API for reliable mouse detection on Windows
+                            import win32api
+                            left_button_state = win32api.GetKeyState(0x01)  # VK_LBUTTON
+                            right_button_state = win32api.GetKeyState(0x02)  # VK_RBUTTON
+                            
+                            if left_button_state < 0 or right_button_state < 0:  # Button is pressed
+                                x, y = pyautogui.position()
+                                # Check if this is a new click (avoid duplicates)
+                                if (current_time - self._last_click_time) > 0.15:  # 150ms debounce
+                                    self._add_action('click', x, y, current_time)
+                                    print(f"🖱️ Auto-recorded click at ({x}, {y})")
+                                    self._last_click_time = current_time
+                        else:
+                            # On non-Windows platforms, auto-click detection is not supported
+                            pass
                                 
                     except Exception as e:
                         # Method 2: Fallback using pyautogui mouse detection
